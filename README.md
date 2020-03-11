@@ -5,7 +5,9 @@
 ### Build and run parser against test.txt:
 
 ```bash
-bison -d src/parser.y && flex src/lexer.l && cc parser.tab.c lex.yy.c -o test
+bison --defines=src/parser.tab.h --output=src/parser.tab.c src/parser.y
+flex --outfile=src/lex.yy.c src/lexer.l
+cc src/parser.tab.c src/lex.yy.c -o test
 ./test
 ```
 
