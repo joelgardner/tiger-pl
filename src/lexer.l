@@ -151,3 +151,11 @@ int has_seen_type(char* type_name) {
   }
   return 0;
 }
+
+void set_input_string(char* input) {
+  yy_scan_string(input);
+}
+
+void end_lexical_scan() {
+  yy_delete_buffer(YY_CURRENT_BUFFER);
+}

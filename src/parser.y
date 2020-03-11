@@ -225,6 +225,12 @@ void parse_file(char *filename, struct ParseContext* astx) {
   yyparse(astx);
 }
 
+void parse_string(char *input, struct ParseContext* astx) {
+  set_input_string("let var a : int := 12345 in a := 54321; end");
+  yyparse(astx);
+  end_lexical_scan();
+}
+
 int yyerror(char *s) {
 	printf("Syntax Error on line %s\n", s);
 	return 0;
