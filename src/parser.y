@@ -10,6 +10,9 @@ void set_input_string(char* input);
 void end_lexical_scan();
 %}
 
+%glr-parser
+%expect-rr 1
+
 %define parse.error verbose
 %parse-param { void *astx }
 
@@ -120,7 +123,7 @@ control_flow:
   ;
 
 lvalue:
-    IDENTIFIER          { $$ = make_symbol($1); }
+    IDENTIFIER %expect-rr 1         { $$ = make_symbol($1); }
   | lvalue LBRACKET exp RBRACKET
   | lvalue DOT IDENTIFIER
   ;
@@ -131,7 +134,7 @@ var_dec:
   ;
 
 type_dec:
-    TYPE TYPE_IDENTIFIER EQUALS type_definition
+    TYPE IDENTIFIER EQUALS type_definition
   ;
 
 fn_call:
@@ -170,10 +173,10 @@ function_dec:
   ;
 
 type_identifier:
-    INT               { $$ = make_int_type(); }
-  | FLOAT             { $$ = make_float_type(); }
-  | STRING            { $$ = make_str_type(); }
-  | TYPE_IDENTIFIER   { $$ = make_defined_type($1); }
+    INT                         { $$ = make_int_type(); }
+  | FLOAT                       { $$ = make_float_type(); }
+  | STRING                      { $$ = make_str_type(); }
+  | IDENTIFIER %expect-rr 1     { $$ = make_defined_type($1); }
   ;
 
 infix_exp:

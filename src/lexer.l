@@ -14,9 +14,6 @@ struct node  {
   struct node* next;
 };
 
-void add_type(char* type_name);
-int has_seen_type(char* type_name);
-
 char string_buf[MAX_STRING_SIZE];
 char *string_buf_ptr;
 
@@ -27,7 +24,6 @@ char *string_buf_ptr;
 %option noinput
 
 %x comment
-%x typedefn
 %x str
 
 float       ([0-9]+\.[0-9]+)
@@ -48,7 +44,7 @@ identifier  ([a-zA-Z][a-zA-Z0-9_]*)
                         }
   \\n                   { *string_buf_ptr++ = '\n'; }
   \\(.|\n)              { *string_buf_ptr++ = yytext[1]; }
-  "\""                    { /* Closing quote - all done */
+  "\""                  { /* Closing quote - all done */
                           BEGIN(INITIAL);
                           *string_buf_ptr = '\0';
                           yylval.string = strdup(string_buf);
@@ -96,8 +92,7 @@ identifier  ([a-zA-Z][a-zA-Z0-9_]*)
 "array"                 { return ARRAY; }
 "function"              { return FUNCTION; }
 "of"                    { return OF; }
-"type"                  { BEGIN(typedefn); return TYPE; }
-<typedefn>{identifier}  { BEGIN(INITIAL); if (!has_seen_type(yytext)) add_type(strdup(yytext)); return TYPE_IDENTIFIER; }
+"type"                  { return TYPE; }
 "int"                   { return INT; }
 "float"                 { return FLOAT; }
 "string"                { return STRING; }
@@ -111,47 +106,11 @@ identifier  ([a-zA-Z][a-zA-Z0-9_]*)
   \/                    /* Eat /s one at a time so we can stop before consuming a *. */
   \n                    { ++line_num; }
 }
-{identifier}            { yylval.string = strdup(yytext); return has_seen_type(yytext) ? TYPE_IDENTIFIER : IDENTIFIER; }
+{identifier}            { yylval.string = strdup(yytext); return IDENTIFIER; }
 [ \t\r]+                ; // Ignore whitespace
 .                       { printf("Unknown token: %s\n", yytext); exit(1); }
 
 %%
-
-
-struct node* head;
-
-void add_type(char* type_name) {
-  printf("add_type called with %s\n", type_name);
-  if (!head) {
-    head = (struct node*)malloc(sizeof(struct node));
-    head->type_name = type_name;
-    head->next = NULL;
-    return;
-  }
-
-  struct node* last = head;
-  while(last && last->next) {
-    // As we traverse the list, check to see that we don't already have this
-    printf("seen: %s\n", last->type_name);
-    last = last->next;
-  }
-
-  printf("adding type %s\n", type_name);
-  last->next = (struct node*)malloc(sizeof(struct node));
-  last->next->type_name = type_name;
-  last->next->next = NULL;
-}
-
-int has_seen_type(char* type_name) {
-  struct node* list = head;
-  while(list) {
-    if (!strcmp(list->type_name, type_name)) {
-      return 1;
-    }
-    list = list->next;
-  }
-  return 0;
-}
 
 void set_input_string(char* input) {
   yy_scan_string(input);
