@@ -1,0 +1,77 @@
+/*
+/**
+this is a
+/*****
+  nested,/
+  //****multiline****/\/
+****/
+comment!
+**/
+*/
+
+let
+  var a := 1234
+  var b := 1234 + 5678
+  var c : int := 1234 + 5678 + 3
+  var d : int := 1234 + 5678 - 1
+  var e : float := 1234 * 5678 / 3.14
+  var f : string := "this is a string with \"escaped quotes\"!"
+
+  type CoolType = int
+  type ArrayOfCoolType = array of CoolType
+  type EmptyRecordType = {}
+  type SomeRecordType = {
+    cool: int,
+    stuff: string,
+    hey: float
+  }
+
+  function sayHello() = f := "hello world"
+  function functionReturningAnInt() : int = 2
+  function fnWithParameter(coolInt : int) : int = 4
+  function fnWithParameters(coolInt : int, coolString : string) : int = 6
+
+  var arrayOfSomeRecordType := int [a] of 3
+  var arrayOfSomeRecordType2 : int := int [a] of 3
+
+  var coolRecord : SomeRecordType := SomeRecordType {
+    cool = 2,
+    stuff = "hello",
+    hey = 2.383
+  }
+
+in
+  a;
+  b;
+  coolRecord.stuff;
+  coolRecord.hey;
+  nil;
+  -3 + -3;
+
+  sayHello();
+  a := functionReturninganInt();
+  fnWithParameter(a);
+  fnWithParameters(a, "my string");
+
+  if coolRecord.cool then 1 else 0;
+
+  if 1 <> 0 then 0;
+  if 0 = 0 then 1;
+  if 0 < 1 then 1;
+  if 1 > 0 then 1;
+  if 1 >= 0 then 1;
+  if 0 <= 1 then 1;
+  if 0 & 1 then 0;
+  if 0 | 1 then 0;
+
+  while 0 do sayHello();
+
+  for j := 0 to 10 do (
+    sayHello();
+    fnWithParameters(coolRecord.cool, coolRecord.stuff);
+  );
+
+  while 1 do break;
+
+end
+

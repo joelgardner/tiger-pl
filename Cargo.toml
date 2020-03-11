@@ -1,0 +1,11 @@
+[package]
+name = "tiger-compiler"
+version = "0.1.0"
+authors = ["Joel Gardner"]
+build = "build.rs"
+
+[dependencies]
+libc = "0.2"
+
+[build-dependencies]
+cc = "1.0"

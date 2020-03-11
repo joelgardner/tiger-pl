@@ -1,0 +1,10 @@
+let
+  var a : int := 12345
+  var s : string := "hello world"
+  var f : float := 1.2345
+in
+  a := 54321;
+  s := "my name is \"mud\"";
+  nil;
+  f := 3.1413
+end
