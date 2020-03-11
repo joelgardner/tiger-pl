@@ -11,7 +11,7 @@ void end_lexical_scan();
 %}
 
 %define parse.error verbose
-%parse-param { struct ParseContext *astx }
+%parse-param { void *astx }
 
 %union {
   int operator;
@@ -64,7 +64,7 @@ void end_lexical_scan();
 %%
 
 prog:
-    exp                 { astx->ast = $1; }
+    exp                 { ((struct ParseContext *)astx)->ast = $1; }
   ;
 
 exp:
