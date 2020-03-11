@@ -3,12 +3,6 @@ use std::os::raw::{c_char, c_float, c_int};
 
 #[derive(Debug)]
 #[repr(C)]
-pub struct ParseContext {
-    pub ast: Option<Box<Expr>>,
-}
-
-#[derive(Debug)]
-#[repr(C)]
 pub enum Expr {
     IntegerLiteral(i32),
     FloatLiteral(f32),

@@ -3,6 +3,7 @@
 #include "parser.tab.h"
 #define MAX_STRING_SIZE 2048
 
+
 int yyerror();
 int line_num = 1;
 int nested_comments = 0;

@@ -5,6 +5,9 @@
 int yylex();
 int yyerror();
 FILE *yyin;
+
+void set_input_string(char* input);
+void end_lexical_scan();
 %}
 
 %define parse.error verbose
@@ -226,7 +229,7 @@ void parse_file(char *filename, struct ParseContext* astx) {
 }
 
 void parse_string(char *input, struct ParseContext* astx) {
-  set_input_string("let var a : int := 12345 in a := 54321; end");
+  set_input_string(input);
   yyparse(astx);
   end_lexical_scan();
 }
