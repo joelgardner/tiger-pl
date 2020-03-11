@@ -1,7 +1,7 @@
 use std::ffi::CStr;
 use std::os::raw::{c_char, c_float, c_int};
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 #[repr(C)]
 pub enum Expr {
     IntegerLiteral(i32),
@@ -15,7 +15,7 @@ pub enum Expr {
     ExprList(ExprCons),
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 #[repr(C)]
 pub enum Type {
     Int,
@@ -24,7 +24,7 @@ pub enum Type {
     Defined(String),
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 #[repr(C)]
 pub enum ExprCons {
     Cons(Box<Expr>, Box<ExprCons>),

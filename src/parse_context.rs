@@ -40,3 +40,19 @@ impl ParseContext {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    //use nodes::Expr::{ExprList, Let};
+    use parse_context::get_ast_string;
+
+    #[test]
+    fn test_string_is_parsed() {
+        let tiger_code = "let var a : int := 12345 in a := 54321; end";
+        let ctx = get_ast_string(tiger_code);
+        let result = ctx.ast.expect("Parsing failed.");
+
+        let expected = "Let { decs: ExprList(Cons(VarDeclaration { symbol: Symbol { name: \"a\", type: Some(Int) }, expr: IntegerLiteral(12345) }, Nil)), exprs: ExprList(Cons(Assignment { symbol: Symbol { name: \"a\", type: None }, expr: IntegerLiteral(54321) }, Nil)) }";
+        assert_eq!(expected, format!("{:?}", *result));
+    }
+}

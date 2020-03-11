@@ -5,7 +5,7 @@ pub mod nodes;
 pub mod parse_context;
 
 fn main() {
-    let file = "test/test2.tig";
+    let file = "samples/test2.tig";
     println!("{:#?}", get_ast_file(file));
 
     let tiger_code = "let var a : int := 12345 in a := 54321; end";
