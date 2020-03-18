@@ -48,7 +48,12 @@ mod tests {
 
     #[test]
     fn test_string_is_parsed() {
-        let tiger_code = "let var a : int := 12345 in a := 54321; end";
+        let tiger_code = "
+        let
+            var a : int := 12345
+        in
+            a := 54321;
+        end";
         let ctx = get_ast_string(tiger_code);
         let result = ctx.ast.expect("Parsing failed.");
 

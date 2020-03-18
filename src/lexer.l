@@ -7,12 +7,11 @@
 int yyerror();
 int line_num = 1;
 int nested_comments = 0;
-int next_identifier_is_type = 0;
 
-struct node  {
-  char* type_name;
-  struct node* next;
-};
+int yycolumn = 0;
+void update_yyloc();
+
+#define YY_USER_ACTION update_yyloc();
 
 char string_buf[MAX_STRING_SIZE];
 char *string_buf_ptr;
@@ -22,6 +21,7 @@ char *string_buf_ptr;
 %option noyywrap
 %option nounput
 %option noinput
+%option yylineno
 
 %x comment
 %x str
@@ -96,7 +96,7 @@ identifier  ([a-zA-Z][a-zA-Z0-9_]*)
 "int"                   { return INT; }
 "float"                 { return FLOAT; }
 "string"                { return STRING; }
-\n                      { ++line_num; }
+\n                      { ++line_num; yycolumn = 0; }
 "/*"                    { /* Encountered beginning of comment */ BEGIN(comment); }
 <comment>{
   "/*"                  { ++nested_comments; }
@@ -118,4 +118,21 @@ void set_input_string(char* input) {
 
 void end_lexical_scan() {
   yy_delete_buffer(YY_CURRENT_BUFFER);
+}
+
+void update_yyloc() {
+  yylloc.first_line = yylloc.last_line = yylineno;
+  // TODO: multi-line strings will break this.
+  yylloc.first_column = yycolumn; yylloc.last_column = yycolumn + yyleng - 1;
+  yycolumn += yyleng;
+}
+
+
+void reset_line_number_info() {
+  yylineno = 1;
+  yycolumn = 0;
+  yylloc.first_line = 1;
+  yylloc.last_line = 1;
+  yylloc.first_column = 0;
+  yylloc.last_column = 0;
 }

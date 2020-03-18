@@ -8,10 +8,13 @@ FILE *yyin;
 
 void set_input_string(char* input);
 void end_lexical_scan();
+void reset_line_number_info();
+
 %}
 
 %glr-parser
 %expect-rr 1
+%locations
 
 %define parse.error verbose
 %parse-param { void *astx }
@@ -214,7 +217,7 @@ field_create:
 
 literal:
     FLOAT_LITERAL     { $$ = make_float_literal($1); }
-  | INT_LITERAL       { $$ = make_int_literal($1); }
+  | INT_LITERAL       { printf("location of int: %d: %d\n", @1.first_line, @1.first_column); $$ = make_int_literal($1); }
   | STRING_LITERAL    { $$ = make_string_literal($1); }
   ;
 
@@ -227,11 +230,12 @@ void parse_file(char *filename, struct ParseContext* astx) {
     return;
   }
   yyin = f;
-
+  reset_line_number_info();
   yyparse(astx);
 }
 
 void parse_string(char *input, struct ParseContext* astx) {
+  reset_line_number_info();
   set_input_string(input);
   yyparse(astx);
   end_lexical_scan();

@@ -8,6 +8,13 @@ fn main() {
     let file = "samples/test2.tig";
     println!("{:#?}", get_ast_file(file));
 
-    let tiger_code = "let var a : int := 12345 in a := 54321; end";
+    let tiger_code = "
+    let
+
+    var a : int := 12345
+    in
+
+    a := 54321;
+    end";
     println!("{:#?}", get_ast_string(tiger_code));
 }
