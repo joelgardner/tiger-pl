@@ -2,16 +2,14 @@
 #include <stdio.h>
 #include "parser.tab.h"
 #define MAX_STRING_SIZE 2048
-
+#define YY_USER_ACTION update_yyloc();
 
 int yyerror();
 int line_num = 1;
 int nested_comments = 0;
-
 int yycolumn = 0;
-void update_yyloc();
 
-#define YY_USER_ACTION update_yyloc();
+void update_yyloc();
 
 char string_buf[MAX_STRING_SIZE];
 char *string_buf_ptr;
@@ -121,9 +119,10 @@ void end_lexical_scan() {
 }
 
 void update_yyloc() {
-  yylloc.first_line = yylloc.last_line = yylineno;
   // TODO: multi-line strings will break this.
-  yylloc.first_column = yycolumn; yylloc.last_column = yycolumn + yyleng - 1;
+  yylloc.first_line = yylloc.last_line = yylineno;
+  yylloc.first_column = yycolumn;
+  yylloc.last_column = yycolumn + yyleng - 1;
   yycolumn += yyleng;
 }
 
@@ -131,8 +130,6 @@ void update_yyloc() {
 void reset_line_number_info() {
   yylineno = 1;
   yycolumn = 0;
-  yylloc.first_line = 1;
-  yylloc.last_line = 1;
-  yylloc.first_column = 0;
-  yylloc.last_column = 0;
+  yylloc.first_line = yylloc.last_line = 1;
+  yylloc.first_column = yylloc.last_column = 0;
 }
