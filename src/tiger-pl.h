@@ -7,7 +7,7 @@ enum Expr_Tag {
   IntegerLiteral,
   StringLiteral,
   FloatLiteral,
-  NilLiteral,
+  Nil,
   Symbol,
   VarDeclaration,
   Let,
@@ -50,7 +50,7 @@ struct StringLiteral_Body {
   char* _0;
 };
 
-struct NilLiteral_Body {};
+struct Nil_Body {};
 
 struct Symbol_Body {
   char* name;
@@ -72,11 +72,11 @@ struct Let_Body {
   struct Expr* exprs;
 };
 
-struct Nil_Body {};
+struct Empty_Body {};
 
 enum ExprCons_Tag {
   Cons,
-  Nil,
+  Empty,
 };
 
 struct Cons_Body {
@@ -88,7 +88,7 @@ struct ExprCons {
   enum ExprCons_Tag tag;
   union {
     struct Cons_Body cons;
-    struct Nil_Body nil;
+    struct Empty_Body empty;
   };
 };
 
@@ -102,7 +102,7 @@ struct Expr {
     struct IntegerLiteral_Body integerLiteral;
     struct StringLiteral_Body stringLiteral;
     struct FloatLiteral_Body floatLiteral;
-    struct NilLiteral_Body nilLiteral;
+    struct Nil_Body nil;
     struct Symbol_Body symbol;
     struct VarDeclaration_Body varDeclaration;
     struct Assignment_Body assignment;

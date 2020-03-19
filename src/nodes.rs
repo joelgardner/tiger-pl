@@ -7,7 +7,7 @@ pub enum Expr {
     IntegerLiteral(i32),
     FloatLiteral(f32),
     StringLiteral(String),
-    NilLiteral,
+    Nil,
     Symbol { name: String, r#type: Option<Type> },
     VarDeclaration { symbol: Box<Expr>, expr: Box<Expr> },
     Assignment { symbol: Box<Expr>, expr: Box<Expr> },
@@ -28,7 +28,7 @@ pub enum Type {
 #[repr(C)]
 pub enum ExprCons {
     Cons(Box<Expr>, Box<ExprCons>),
-    Nil,
+    Empty,
 }
 
 #[no_mangle]
@@ -121,7 +121,7 @@ pub extern "C" fn make_assignment(symbol: Box<Expr>, expr: Box<Expr>) -> Box<Exp
 #[no_mangle]
 pub extern "C" fn make_empty_exp_list() -> Box<Expr> {
     println!("in make_empty_exp_list");
-    Box::new(Expr::ExprList(ExprCons::Nil))
+    Box::new(Expr::ExprList(ExprCons::Empty))
 }
 
 #[no_mangle]
@@ -137,5 +137,5 @@ pub extern "C" fn append_to_exp_list(exp_list: Box<Expr>, exp: Box<Expr>) -> Box
 #[no_mangle]
 pub extern "C" fn make_nil() -> Box<Expr> {
     println!("in make_empty_exp_list");
-    Box::new(Expr::NilLiteral)
+    Box::new(Expr::Nil)
 }
