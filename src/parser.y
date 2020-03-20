@@ -3,7 +3,7 @@
 #include <string.h>
 #include "tiger-pl.h"
 int yylex();
-int yyerror();
+void yyerror(struct ParseContext* astx, const char *msg);
 FILE *yyin;
 
 void set_input_string(char* input);
@@ -241,7 +241,7 @@ void parse_string(char *input, struct ParseContext* astx) {
   end_lexical_scan();
 }
 
-int yyerror(char *s) {
-	printf("Syntax Error on line %s\n", s);
-	return 0;
+void yyerror(struct ParseContext* ctx, const char *msg) {
+  (void)(ctx);  // Suppress unused parameter warning
+  printf("Syntax Error on line %d: %s\n", yylloc.first_line, msg);
 }

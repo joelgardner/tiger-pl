@@ -4,7 +4,6 @@
 #define MAX_STRING_SIZE 2048
 #define YY_USER_ACTION update_yyloc();
 
-int yyerror();
 int line_num = 1;
 int nested_comments = 0;
 int yycolumn = 0;
@@ -33,7 +32,7 @@ identifier  ([a-zA-Z][a-zA-Z0-9_]*)
 
 \"                      { string_buf_ptr = string_buf; BEGIN(str); }
 <str>{
-  \n                    { yyerror("Unterminated string contains unescaped newline."); }
+  \n
   [^\\\n\"]+            { /* Eat up anything inside the string that isn't an escape/newline/" */
 		                      char *yptr = yytext;
                           while (*yptr) {
@@ -128,8 +127,6 @@ void update_yyloc() {
 
 
 void reset_line_number_info() {
-  yylineno = 1;
-  yycolumn = 0;
-  yylloc.first_line = yylloc.last_line = 1;
-  yylloc.first_column = yylloc.last_column = 0;
+  yylloc.first_line   = yylloc.last_line   = yylineno = 1;
+  yylloc.first_column = yylloc.last_column = yycolumn = 0;
 }
