@@ -43,7 +43,9 @@ impl ParseContext {
 
 #[cfg(test)]
 mod tests {
-    //use nodes::Expr::{ExprList, Let};
+    use nodes::Expr::{Assignment, ExprList, IntegerLiteral, Let, Symbol, VarDeclaration};
+    use nodes::ExprCons::{Cons, Empty};
+    use nodes::Type::Int;
     use parse_context::get_ast_string;
 
     #[test]
@@ -57,7 +59,32 @@ mod tests {
         let ctx = get_ast_string(tiger_code);
         let result = ctx.ast.expect("Parsing failed.");
 
-        let expected = "Let { decs: ExprList(Cons(VarDeclaration { symbol: Symbol { name: \"a\", type: Some(Int) }, expr: IntegerLiteral(12345) }, Nil)), exprs: ExprList(Cons(Assignment { symbol: Symbol { name: \"a\", type: None }, expr: IntegerLiteral(54321) }, Nil)) }";
-        assert_eq!(expected, format!("{:?}", *result));
+        let expected = "Let { decs: ExprList(Cons(VarDeclaration { symbol: Symbol { name: \"a\", type: Some(Int) }, expr: IntegerLiteral(12345) }, Empty)), exprs: ExprList(Cons(Assignment { symbol: Symbol { name: \"a\", type: None }, expr: IntegerLiteral(54321) }, Empty)) }";
+        let expected2 = Let {
+            decs: ExprList(Cons(
+                VarDeclaration {
+                    symbol: Symbol {
+                        name: "a".to_string(),
+                        r#type: Some(Int),
+                    }
+                    .into_boxed(),
+                    expr: IntegerLiteral(12345).into_boxed(),
+                }
+                .into_boxed(),
+                Box::new(Empty),
+            ))
+            .into_boxed(),
+            exprs: Box::new(ExprList(Cons(
+                Box::new(Assignment {
+                    symbol: Box::new(Symbol {
+                        name: "a".to_string(),
+                        r#type: None,
+                    }),
+                    expr: Box::new(IntegerLiteral(54321)),
+                }),
+                Box::new(Empty),
+            ))),
+        };
+        assert_eq!(expected2, *result);
     }
 }

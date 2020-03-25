@@ -15,6 +15,12 @@ pub enum Expr {
     ExprList(ExprCons),
 }
 
+impl Expr {
+    pub fn into_boxed(self) -> Box<Self> {
+        Box::new(self)
+    }
+}
+
 #[derive(Debug, PartialEq)]
 #[repr(C)]
 pub enum Type {
